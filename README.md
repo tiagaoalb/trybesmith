@@ -218,6 +218,33 @@ const connection = mysql.createPool({
 
 O banco terá três tabelas: usuários, produtos e pedidos.
 
+```sql
+DROP SCHEMA IF EXISTS Trybesmith;
+CREATE SCHEMA Trybesmith;
+USE Trybesmith;
+
+CREATE TABLE Users (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  username TEXT NOT NULL,
+  classe TEXT NOT NULL,
+  level INTEGER NOT NULL,
+  password TEXT NOT NULL
+);
+
+CREATE TABLE Products (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  name TEXT NOT NULL,
+  amount INTEGER NOT NULL
+);
+
+CREATE TABLE Orders (
+  id INTEGER AUTO_INCREMENT PRIMARY KEY NOT NULL,
+  productId INTEGER,
+  amount INTEGER,
+  FOREIGN KEY (productId) REFERENCES Products (id)
+);
+```
+
 A tabela de usuários deverá ter o seguinte nome: `Users`.
 
 Os campos da tabela `Users` terão este formato:
@@ -229,7 +256,7 @@ Os campos da tabela `Users` terão este formato:
 A resposta do insert para ser retornada após a criação é esta:
 
 ```json
-{ "id" : 1, "username" : "Erick Jacquin", "class" : "knight", "level" : 1, "password" : "123456" }
+{ "id" : 1, "username" : "Erick Jacquin", "classe" : "knight", "level" : 1, "password" : "123456" }
 ```
 (O id será gerado automaticamente pelo MySQL)
 
@@ -336,43 +363,46 @@ npm test users.test.js
 
 - A rota deve ser (`/users`).
 
-- No banco um usuário precisa ter os campos Email, Senha, Nome e Role.
+- No banco um usuário precisa ter os campos username, classe, level e password.
 
-- Para criar um usuário através da API, todos os campos são obrigatórios, com exceção do Role.
-
-- O campo Email deve ser único.
-
-- Usuários criados através desse endpoint devem ter seu campo Role com o atributo _user_, ou seja, devem ser usuários comuns, e não admins.
+- Para criar um usuário através da API, todos os campos são obrigatórios.
 
 - O body da requisição deve conter o seguinte formato:
 
   ```json
   {
-    "name": "string",
-    "email": "string",
+    "username": "string",
+    "classe": "string",
+    "level": 1,
     "password": "string"
   }
   ```
 
 **Além disso, as seguintes verificações serão feitas:**
 
-- **[Será validado que o campo "name" é obrigatório]**
+- **[Será validado que o campo "username" é obrigatório]**
 
-Se o usuário não tiver o campo "name" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o usuário não tiver o campo "username" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
 ![Usuário sem Nome](./public/usuariosemnome.png)
 
-- **[Será validado que o campo "email" é obrigatório]**
+- **[Será validado que o campo "username" tem o tipo string]**
 
-Se o usuário não tiver o campo "email" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o campo "username" não for do tipo `string`, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Usuário sem Email](./public/usuariosememail.png)
+![Usuário sem Nome](./public/usuariocomtipoincorreto.png)
 
-- **[Será validado que não é possível cadastrar usuário com o campo email inválido]**
+- **[Será validado que o campo "classe" é obrigatório]**
 
-Se o usuário tiver o campo email inválido o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o usuário não tiver o campo "classe" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Email Inválido](./public/campoemailinvalido.png)
+![Usuário sem Classe](./public/usuariosemclasse.png)
+
+- **[Será validado que não é possível cadastrar usuário com o campo classe inválido]**
+
+Se o usuário tiver o campo classe inválido o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+
+![Classe Inválida](./public/campoclasseinvalido.png)
 
 - **[Será validado que o campo "senha" é obrigatório]**
 
@@ -461,7 +491,7 @@ Se foi feito login com sucesso o resultado retornado deverá ser conforme exibid
 
   ```json
   {
-    "name": "string",
+    "username": "string",
     "ingredients": "string",
     "preparation": "string"
   }
@@ -475,9 +505,9 @@ Se foi feito login com sucesso o resultado retornado deverá ser conforme exibid
 
 **Além disso, as seguintes verificações serão feitas:**
 
-- **[Será validado que não é possível cadastrar receita sem o campo "name"]**
+- **[Será validado que não é possível cadastrar receita sem o campo "username"]**
 
-Se a receita não tiver o campo "name" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se a receita não tiver o campo "username" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
 ![Receita sem nome](./public/produtosemnome.png)
 
@@ -555,7 +585,7 @@ O resultado retornado para listar uma receita que não existe deverá ser confor
 
 Crie um arquivo `seed.js` na raiz do projeto com uma query do Mongo DB capaz de inserir um usuário na coleção _users_ com os seguintes valores:
 
-`{ name: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' }`
+`{ username: 'admin', email: 'root@email.com', password: 'admin', role: 'admin' }`
 
 **Obs.:** Esse usuário tem o poder de criar, deletar, atualizar ou remover qualquer receita, independente de quem a cadastrou. Isso será solicitado ao longo dos próximos requisitos.
 
@@ -577,7 +607,7 @@ Será validado no arquivo `seed.js` existe a query para criar um usuário root
 
   ```json
   {
-    "name": "string",
+    "username": "string",
     "ingredients": "string",
     "preparation": "string"
   }
@@ -727,7 +757,7 @@ O resultado do numero total de linhas cobertas deve ser igual ou maior que `50`.
 
   ```json
   {
-    "name": "string",
+    "username": "string",
     "email": "string",
     "password": "string"
   }
