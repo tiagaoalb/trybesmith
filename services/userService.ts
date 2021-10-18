@@ -4,23 +4,24 @@ import {
   createUserModel,
   getUsersModel,
   getUserByIdModel,
+  getUserByUsername,
   updateUserModel,
   deleteUserModel
 } from "../models/userModel";
 
-const createUserService = async (user: userType) => {
+export const createUserService = async (user: userType) => {
   userSchema.parse(user);
   const newUser = await createUserModel(user);
   const id = JSON.parse(JSON.stringify(newUser)).insertId;
   return {id, username: user.username};
 }
 
-const getUsersService = async() => {
+export const getUsersService = async() => {
   const users = await getUsersModel();
   return users;
 }
 
-const getUserByIdService = async(id: string) => {
+export const getUserByIdService = async(id: number) => {
   const sale = await getUserByIdModel(id);
   const saleResult = JSON.parse(JSON.stringify(sale))
   if (!saleResult[0]) {
@@ -29,20 +30,21 @@ const getUserByIdService = async(id: string) => {
   return sale;
 }
 
-const updateUserService = async(id: string, user: userType) => {
+export const updateUserService = async(id: number, user: userType) => {
   const updatedUser = await updateUserModel(id, user);
   return updatedUser;
 }
 
-const deleteUserService = async(id: string) => {
+export const deleteUserService = async(id: number) => {
   const deletedUser = getUserByIdService(id);
   await deleteUserModel(id);
   return deletedUser;
 }
 
-const userLoginService = async(login: loginType) => {
+export const userLoginService = async(login: loginType) => {
   loginSchema.parse(login)
-  const user = await getUserByIdModel(String(login.userId))
+  const user = await getUserByUsername(login.username)
+  console.log(user)
   const userResult = JSON.parse(JSON.stringify(user))
   if (!userResult[0]) {
     throw new Error('User Not found')
@@ -51,13 +53,4 @@ const userLoginService = async(login: loginType) => {
     throw new Error('UserId or Password invalid')
   }
   return userResult;
-}
-
-export {
-  createUserService,
-  getUsersService,
-  userLoginService,
-  getUserByIdService,
-  updateUserService,
-  deleteUserService
 }

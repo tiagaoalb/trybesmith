@@ -16,7 +16,7 @@ const errorMiddleware = (
   if (["UserId or Password invalid", "Token not found", "Invalid token"].includes(err.message)) {
     return response.status(401).json({message: err.message})
   }
-
+  console.log(err)
   return response.status(500).json({ message: "Internal Server Error" })
 }
 
