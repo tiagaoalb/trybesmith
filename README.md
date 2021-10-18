@@ -390,43 +390,55 @@ Se o usuário não tiver o campo "username" o resultado retornado deverá ser co
 
 Se o campo "username" não for do tipo `string`, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Usuário sem Nome](./public/usuariocomtipoincorreto.png)
+![Usuário com tipo incorreto](./public/usuariocomtipoincorreto.png)
+
+- **[Será validado que o campo "username" não está vazio]**
+
+Se o campo "username" estiver vazio, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+
+![Usuário vazio](./public/usuariovazio.png)
 
 - **[Será validado que o campo "classe" é obrigatório]**
 
-Se o usuário não tiver o campo "classe" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o usuário não tiver o campo "classe", o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Usuário sem Classe](./public/usuariosemclasse.png)
+![Usuário sem Classe](./public/usurariosemclasse.png)
 
-- **[Será validado que não é possível cadastrar usuário com o campo classe inválido]**
+- **[Será validado que o campo classe é do tipo string]**
 
-Se o usuário tiver o campo classe inválido o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o campo "classe" não for do tipo `string`, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Classe Inválida](./public/campoclasseinvalido.png)
+![Classe Inválida](./public/classecomtipoincorreto.png)
 
-- **[Será validado que o campo "senha" é obrigatório]**
+- **[Será validado que o campo classe não está vazio]**
 
-Se o usuário não tiver o campo "senha" o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+Se o campo "classe" estiver vazio, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Usuário sem Senha](./public/usuariosemsenha.png)
+![Classe vazio](./public/classevazio.png)
 
-- **[Será validado que o campo "email" é único]**
+- **[Será validado que o campo "level" é obrigatório]**
 
-Se o usuário cadastrar o campo "email" com um email que já existe, o resultado retornado deverá ser conforme exibido abaixo, com um status http `409`:
+Se o usuário não tiver o campo "level", o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
 
-![Email já Usado](./public/emailjausado.png)
+![Usuário sem Level](./public/usuariosemlevel.png)
+
+- **[Será validado que o campo "level" é do tipo number]**
+
+Se o campo "level" não for do tipo `number`, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+
+![Level Inválido](./public/levelcomtipoincorreto.png)
+
+- **[Será validado que o campo "level" é maior que zero]**
+
+Se o campo "level" for menor ou igual a zero, o resultado retornado deverá ser conforme exibido abaixo, com um status http `400`:
+
+![Level menor ou igual a zero](./public/levelmenorouigualazero.png)
 
 - **[Será validado que é possível cadastrar usuário com sucesso]**
 
 Se o usuário for cadastrado com sucesso o resultado retornado deverá ser conforme exibido abaixo, com um status http `201`:
 
 ![Usuário Cadastrado](./public/usuariocriadocomsucesso.png)
-
-- **[Será validado que é possível ao cadastrar usuário, o valor do campo "role" tenha o valor "user"]**
-
-Se o usuário for criado com sucesso o resultado retornado deverá ser conforme exibido abaixo, com um status http `201`:
-
-![Campo Role](./public/validarrole.png)
 
 ### 2 - Crie um endpoint para o login de usuários
 
